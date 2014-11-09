@@ -26,27 +26,24 @@ KRKPA7 is a shorthand for King Rook versus King Pawn on A7, which is a chess end
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=.7\textwidth]{example}
-	\caption{Example board set up}
+	\caption{Example board setup}
 \end{figure}
 
 \clearpage
 
 \subsection{Data set}
-Data set contains 3196 set ups of chess board, each one with different positions of both kings and the rook, the pawn is fixed on A7.
+Data set contains 3196 setups of chess board, each one with different positions
+of both kings and the rook, the pawn is fixed on A7. The 37th column is a class
+column denoting {\bf win} or {\bf nowin} of white player. For our purposes we
+don't need to perform any preprocessing. The set is not as large for the
+algorithms to be unable to create desired models.
 
-Each board set up is described by 36 attributes described in table \ref{tab:attributes}.
-
-\section{Weka}
-\section{IBM PASW}
-\section{Enterprise Modeler}
-\section{Rapid Miner}
-
-
+Each board setup is described by 36 attributes described in table \ref{tab:attributes}.
 \begin{table}[h]
 \makebox[\textwidth][c]{
 \begin{tabular}{|l|l|l|}
 \hline
-position & shorthand & description \\
+{\bf Position} & {\bf Abbreviation} & {\bf description} \\
 \hline
 1	&bkblk	&the BK is not in the way \\
 2	&bknwy	&the BK is not in the BR's way \\
@@ -90,6 +87,70 @@ position & shorthand & description \\
 \caption{Board positions attributes~\citep{Michie1995-MICCAA-2}}
 \label{tab:attributes}
 \end{table}
+
+\clearpage
+
+\section{WEKA}
+WEKA (Waikato Environment for Knowledge Analysis) is an open source data mining software from University od Waikato, New Zealand. 
+
+\subsection{Classification}
+In order to predict whether the white player wins or loses from board setup, we
+tested several classification algorithms implemented in WEKA. Classifiers were trained using k-fold cross-validation with $k = 10$.
+
+\paragraph{ZeroR} is a simple classifier which ignores every attribute and
+simply assigns dominating class to each sample.  Uneffective in this case
+because the distribution of win and nowin class is roughly equal (52.2215\% win
+and 47.7785\% nowin).
+\paragraph{OneR} is a classifier which selects attribute with smallest
+classification error and uses that attribute as its classification rule.
+\paragraph{NaiveBayes} is a classifier constructed from naive Bayes probability model.
+\paragraph{Decision tree algorithms} construct a decision tree from the attributes of training set.
+
+\mbox{}\\
+\begin{table}[h]
+\makebox[\textwidth][c]{
+\begin{tabular}{|l|r|}
+\hline
+{\bf Algorithm} & {\bf Success rate} \\
+\hline
+ZeroR & 52.2215\% \\
+OneR &  66.4581\% \\
+NaiveBayes &  87.8911\% \\
+J48 (decision tree) & 99.4368\% \\
+SimpleCart (decision tree) & 99.3742\% \\
+RandomForest (decision tree) & 98.7797\% \\
+\hline
+\end{tabular}
+}
+\caption{WEKA Classifiers}
+\label{tab:attributes}
+\end{table}
+
+\subsection{Association}
+To find association rules in KRKPA7 data set we used {\bf Apriori} algorithm.
+Best rules found:
+
+\begin{enumerate}
+\item thrsk=f 3060 $\rightarrow$ spcop=f 3060
+\item skach=f thrsk=f 3049 $\rightarrow$ spcop=f 3049
+\item hdchk=f thrsk=f 3045 $\rightarrow$ spcop=f 3045
+\item reskd=f thrsk=f 3045 $\rightarrow$ spcop=f 3045
+\item skach=f 3185 $\rightarrow$ spcop=f 3184
+\item hdchk=f 3181 $\rightarrow$ spcop=f 3180
+\item reskd=f 3170 $\rightarrow$ spcop=f 3169
+\item hdchk=f skach=f 3170 $\rightarrow$ spcop=f 3169
+\item reskd=f skach=f 3159 $\rightarrow$ spcop=f 3158
+\item hdchk=f reskd=f 3155 $\rightarrow$ spcop=f 3154
+\end{enumerate}
+
+
+
+
+\section{IBM PASW}
+\section{Enterprise Modeler}
+\section{Rapid Miner}
+
+
 
 \clearpage
 \bibliographystyle{csplainnat}
