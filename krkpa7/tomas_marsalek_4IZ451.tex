@@ -6,6 +6,8 @@
 
 \graphicspath{{pics/}}
 
+\DeclareUnicodeCharacter{00A0}{ }
+
 
 \title{KRKPA7 problem in various data mining software \\ 4IZ451 - Knowledge discovery in databases}
 \author{Tomáš Maršálek}
@@ -144,11 +146,227 @@ Best rules found:
 \end{enumerate}
 
 
-
-
-\section{IBM PASW}
-\section{Enterprise Modeler}
+\clearpage
 \section{Rapid Miner}
+RapidMiner is a software by company RapidMiner for commercial use of machine learning, data and text mining and predictive and business analytics.
+
+\subsection{Classification}
+Preprocessing steps for krkpa7 data set in RapidMiner require to only specify
+target column.  To create a classifier in RapidMiner, we layout several
+components together starting from data input, then going through validation
+step, which makes all the partitioning, classification and model performance
+evaluation, and finishing in the output of the pipeline.
+
+\begin{figure}[!ht]
+	\centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{rapid_main}}
+    \caption{Pipeline setup}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{rapid_naivebayes}}
+    \caption{Naive bayes classifier component}
+\end{figure}
+
+If we use desicion tree classifier, we can get either graphical or textual representation of the resulting classifier.
+
+\begin{figure}[!ht]
+	\centering
+\tiny\begin{verbatim}
+Tree
+rimmx = f
+|   bxqsq = f
+|   |   wknck = f
+|   |   |   wkna8 = f
+|   |   |   |   bkxbq = f
+|   |   |   |   |   wkpos = f
+|   |   |   |   |   |   katri = b
+|   |   |   |   |   |   |   bkblk = f: nowin {won=0, nowin=15}
+|   |   |   |   |   |   |   bkblk = t
+|   |   |   |   |   |   |   |   hdchk = f: won {won=21, nowin=1}
+|   |   |   |   |   |   |   |   hdchk = t: nowin {won=0, nowin=4}
+|   |   |   |   |   |   katri = n
+|   |   |   |   |   |   |   bkblk = f
+|   |   |   |   |   |   |   |   wkcti = f: nowin {won=0, nowin=55}
+|   |   |   |   |   |   |   |   wkcti = t
+|   |   |   |   |   |   |   |   |   r2ar8 = f
+|   |   |   |   |   |   |   |   |   |   reskr = f
+|   |   |   |   |   |   |   |   |   |   |   dsopp = f: nowin {won=2, nowin=3}
+|   |   |   |   |   |   |   |   |   |   |   dsopp = t: won {won=2, nowin=0}
+|   |   |   |   |   |   |   |   |   |   reskr = t: nowin {won=0, nowin=6}
+|   |   |   |   |   |   |   |   |   r2ar8 = t: nowin {won=0, nowin=14}
+|   |   |   |   |   |   |   bkblk = t
+|   |   |   |   |   |   |   |   hdchk = f: won {won=22, nowin=0}
+|   |   |   |   |   |   |   |   hdchk = t: nowin {won=0, nowin=4}
+|   |   |   |   |   |   katri = w: won {won=50, nowin=0}
+|   |   |   |   |   wkpos = t
+|   |   |   |   |   |   katri = b
+|   |   |   |   |   |   |   bkblk = f: nowin {won=0, nowin=20}
+|   |   |   |   |   |   |   bkblk = t
+|   |   |   |   |   |   |   |   rxmsq = f: won {won=8, nowin=0}
+|   |   |   |   |   |   |   |   rxmsq = t: nowin {won=1, nowin=1}
+|   |   |   |   |   |   katri = n
+|   |   |   |   |   |   |   rxmsq = f
+|   |   |   |   |   |   |   |   dsopp = f: won {won=221, nowin=0}
+|   |   |   |   |   |   |   |   dsopp = t
+|   |   |   |   |   |   |   |   |   dwipd = g
+|   |   |   |   |   |   |   |   |   |   skewr = f: won {won=8, nowin=0}
+|   |   |   |   |   |   |   |   |   |   skewr = t
+|   |   |   |   |   |   |   |   |   |   |   wtoeg = n: won {won=3, nowin=0}
+|   |   |   |   |   |   |   |   |   |   |   wtoeg = t: nowin {won=0, nowin=2}
+|   |   |   |   |   |   |   |   |   dwipd = l: won {won=23, nowin=0}
+|   |   |   |   |   |   |   rxmsq = t
+|   |   |   |   |   |   |   |   qxmsq = f: nowin {won=0, nowin=15}
+|   |   |   |   |   |   |   |   qxmsq = t: won {won=27, nowin=0}
+|   |   |   |   |   |   katri = w: won {won=49, nowin=0}
+|   |   |   |   bkxbq = t: won {won=599, nowin=0}
+|   |   |   wkna8 = t
+|   |   |   |   bknwy = f: nowin {won=0, nowin=106}
+|   |   |   |   bknwy = t
+|   |   |   |   |   r2ar8 = f
+|   |   |   |   |   |   simpl = f: won {won=3, nowin=0}
+|   |   |   |   |   |   simpl = t: nowin {won=0, nowin=5}
+|   |   |   |   |   r2ar8 = t: nowin {won=0, nowin=9}
+|   |   wknck = t
+|   |   |   r2ar8 = f
+|   |   |   |   bkxcr = f
+|   |   |   |   |   skrxp = f
+|   |   |   |   |   |   mulch = f
+|   |   |   |   |   |   |   thrsk = f
+|   |   |   |   |   |   |   |   bkona = f
+|   |   |   |   |   |   |   |   |   reskr = f
+|   |   |   |   |   |   |   |   |   |   blxwp = f
+|   |   |   |   |   |   |   |   |   |   |   bkon8 = f
+|   |   |   |   |   |   |   |   |   |   |   |   skach = f: won {won=38, nowin=0}
+|   |   |   |   |   |   |   |   |   |   |   |   skach = t: nowin {won=0, nowin=2}
+|   |   |   |   |   |   |   |   |   |   |   bkon8 = t: nowin {won=0, nowin=2}
+|   |   |   |   |   |   |   |   |   |   blxwp = t: nowin {won=0, nowin=3}
+|   |   |   |   |   |   |   |   |   reskr = t: nowin {won=0, nowin=6}
+|   |   |   |   |   |   |   |   bkona = t: nowin {won=0, nowin=6}
+|   |   |   |   |   |   |   thrsk = t: nowin {won=0, nowin=7}
+|   |   |   |   |   |   mulch = t: nowin {won=0, nowin=18}
+|   |   |   |   |   skrxp = t: nowin {won=0, nowin=34}
+|   |   |   |   bkxcr = t: nowin {won=0, nowin=77}
+|   |   |   r2ar8 = t
+|   |   |   |   wkovl = f
+|   |   |   |   |   bkxcr = f
+|   |   |   |   |   |   bkona = f
+|   |   |   |   |   |   |   mulch = f
+|   |   |   |   |   |   |   |   bkon8 = f: won {won=8, nowin=0}
+|   |   |   |   |   |   |   |   bkon8 = t: nowin {won=0, nowin=3}
+|   |   |   |   |   |   |   mulch = t: nowin {won=0, nowin=11}
+|   |   |   |   |   |   bkona = t: nowin {won=0, nowin=19}
+|   |   |   |   |   bkxcr = t: nowin {won=0, nowin=41}
+|   |   |   |   wkovl = t: nowin {won=0, nowin=295}
+|   bxqsq = t: nowin {won=0, nowin=743}
+rimmx = t: won {won=584, nowin=0}
+\end{verbatim}
+\caption{Decision tree of KRKPA7 in RapidMiner}
+\end{figure}
+
+
+\clearpage
+
+
+\section{IBM SPSS Modeler}
+Originally named Clementine, also known as SPSS Clementine, PASW Modeler is a
+data mining and text analytics software by IBM.
+
+\subsection{Classification}
+In the pipeline schema we first retrieve data from a file. Unlike in WEKA and
+RapidMiner, we need to provide a csv file instead of more suitable arff file,
+which contains more detailed definitions of data types. We run the data through
+auto data preparation step and feed the result to feature selector. After the
+selector is trained in the first run of the pipeline, we use the resulting
+component in the next step of pipeline and feed the refined data to a partition
+step so that we get two sets used for training and testing of the upcoming
+models. In this case we used c5 decision tree and neural network classifiers.
+Same as in the feature selector component, we need first to build the models
+and use the newly created components down in the pipeline. To evaluate results
+we feed the outputs from the classifiers to error matrices for each of the
+models.
+
+
+\begin{figure}[!ht]
+	\centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{pasw}}
+    \caption{Pipeline setup of classifiers in PASW}
+
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.3\textwidth]{pasw_models}}
+    \caption{Result of PASW Models}
+\end{figure}
+
+\mbox{}\\
+\begin{table}[h]
+\makebox[\textwidth][c]{
+\begin{tabular}{|c|l|r|}
+\hline
+{\bf class} & {\bf nowin} & {\bf win} \\
+\hline
+nowin & 1510 & 17 \\
+won & 95 & 1574 \\
+\hline
+\end{tabular}
+}
+\caption{Error matrix for c5 decision tree in PASW}
+\label{tab:c5_pasw}
+\end{table}
+
+
+\mbox{}\\
+\begin{table}[h]
+\makebox[\textwidth][c]{
+\begin{tabular}{|c|l|r|}
+\hline
+{\bf class} & {\bf nowin} & {\bf win} \\
+\hline
+nowin & 1495 & 32 \\
+won & 83 & 1586 \\
+\hline
+\end{tabular}
+}
+\caption{Error matrix for neural network in PASW}
+\label{tab:neural_pasw}
+\end{table}
+
+
+\begin{figure}[!ht]
+	\centering
+\begin{verbatim}
+Results for output field  class 
+	Comparing $C- class  with  class 
+		'Partition'            1_Training            2_Testing         
+		Correct                     1 450   96,09%       1 634   96,86%
+		Wrong                          59    3,91%          53    3,14%
+		Total                       1 509                1 687
+\end{verbatim}
+\caption{Analysis of c5 decision tree in PASW}
+\end{figure}
+
+
+\begin{figure}[!ht]
+	\centering
+\begin{verbatim}
+Results for output field  class 
+	Comparing $N- class  with  class 
+		'Partition'            1_Training            2_Testing         
+		Correct                     1 457   96,55%       1 624   96,27%
+		Wrong                          52    3,45%          63    3,73%
+		Total                       1 509                1 687         
+\end{verbatim}
+\caption{Analysis of neural network in PASW}
+\end{figure}
+
+
+\clearpage
+
+
+\section{Enterprise Modeler}
 
 
 
