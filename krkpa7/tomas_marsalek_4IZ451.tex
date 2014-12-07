@@ -9,7 +9,7 @@
 \DeclareUnicodeCharacter{00A0}{ }
 
 
-\title{KRKPA7 problem in various data mining software \\ 4IZ451 - Knowledge discovery in databases}
+\title{KRKPA7 problem in various data mining tools \\ 4IZ451 - Knowledge discovery in databases}
 \author{Tomáš Maršálek}
 \date{\today}
 
@@ -23,7 +23,7 @@ The purpose of this work is to analyze database of KRKPA7 problem using four dif
 The nature of problem for this assignment is suitable for classification and association modeling, but not for clustering.
 
 \section{KRKPA7 problem}
-KRKPA7 is a shorthand for King Rook versus King Pawn on A7, which is a chess endgame. The black player has a king and a pawn left, where the pawn is on A7, which is one turn away from turning his into a queen. The white player has a turn in this situation and has a king and a rook to play with.
+KRKPA7 is a shorthand for King Rook versus King Pawn on A7, which is a chess endgame. The black player has a king and a pawn left, where the pawn is on A7, which is one turn away from turning him into a queen. The white player has a turn in this situation and has a king and a rook to play with.
 
 \begin{figure}[!ht]
 	\centering
@@ -169,11 +169,13 @@ evaluation, and finishing in the output of the pipeline.
     \caption{Naive bayes classifier component}
 \end{figure}
 
-If we use desicion tree classifier, we can get either graphical or textual representation of the resulting classifier.
+If we use desicion tree classifier, we can get either graphical or textual
+representation of the resulting classifier. We only include text formatted tree
+below, because graphical representation was simply too wide to fit the page.
 
-\begin{figure}[!ht]
-	\centering
-\tiny\begin{verbatim}
+
+\mbox{} \\[1cm]
+\small\begin{verbatim}
 Tree
 rimmx = f
 |   bxqsq = f
@@ -262,8 +264,6 @@ rimmx = f
 |   bxqsq = t: nowin {won=0, nowin=743}
 rimmx = t: won {won=584, nowin=0}
 \end{verbatim}
-\caption{Decision tree of KRKPA7 in RapidMiner}
-\end{figure}
 
 
 \clearpage
@@ -284,8 +284,9 @@ step so that we get two sets used for training and testing of the upcoming
 models. In this case we used c5 decision tree and neural network classifiers.
 Same as in the feature selector component, we need first to build the models
 and use the newly created components down in the pipeline. To evaluate results
-we feed the outputs from the classifiers to error matrices for each of the
-models.
+(c5 decision tree in table \ref{tab:c5_pasw} and neural net in table
+\ref{tab:neural_pasw}) we feed the outputs from the classifiers to error
+matrices for each of the models.
 
 
 \begin{figure}[!ht]
@@ -371,6 +372,30 @@ Results for output field  class
 
 
 \clearpage
+
+\section{Conclusion}
+We used four data mining tools to show how to perform simple data
+classification from KRKPA7 data set. We also used WEKA to further analyse the
+data resulting in a set of association rules among attributes of the data set.
+The purpose of this project was rather educational to make students familiar
+with data mining tools both freely available and commercial.
+
+Personally I found all of the tools intuitive to some degree because solving
+the same problem in one tool makes you understand what to look for in the next
+tool from the four.
+
+If I were to choose a data mining tool for my personal purposes I would choose
+WEKA for the simple reason that it complies with ideas of open software which
+according to me governs the way of evolution of software these days. It is
+worth mentioning that it can be used as a library rather than rigidly using it
+as a heavyweight GUI all-in-one tool that badly integrates with custom
+software.
+
+\subsection{Results}
+Principles of used algorithms are basically equal in each of the used data
+mining tools, therefore the accuracy of same algorithm models across different
+tools is unsurprisingly very similar.
+
 \bibliographystyle{csplainnat}
 \bibliography{ref}
 
