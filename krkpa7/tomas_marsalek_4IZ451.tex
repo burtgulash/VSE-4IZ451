@@ -367,11 +367,93 @@ Results for output field  class
 \clearpage
 
 
-\section{Enterprise Modeler}
+\section{SAS Enterprise Miner}
+SAS (Statistical Analysis System) is a software suite by SAS Institute, which
+offers both programming language capabilities through SAS programming language
+and point-and-click interface for non-programmers.
 
+For purposes of this project the point-and-click interface was used resulting
+in diagram depicted in picture~\ref{pic:sas_diagram}.
 
+\begin{figure}[!ht]
+	\centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.2\textwidth]{sas_diagram}}
+    \caption{SAS pipeline setup}
+    \label{pic:sas_diagram}
+\end{figure}
+
+Same as in the previous pipeline-designer tools, we first create file importer
+and load it with krkpag csv input file. The class column is marked as target
+and the rest is kept as an input (picture~\ref{pic:sas_settarget}).
+
+\begin{figure}[!ht]
+	\centering
+    \makebox[\textwidth][c]{\includegraphics[width=1.0\textwidth]{sas_settarget}}
+    \caption{SAS set target attribute}
+    \label{pic:sas_settarget}
+\end{figure}
 
 \clearpage
+
+We run the data through data partitioner in default ratio 40:30:30
+(Training:Validation:Test) to two models - neural network and decision tree
+with all the settings kept at defaults. The final stage of the pipeline before
+reporting results is a model comparison box, which allows us to compare
+generated models. We push output of this comparison to reporting output which
+generates a nice pdf file with various data from which we are now only
+interested in the error matrix for both classifiers and overall performance of
+the models.
+
+\begin{table}[h]
+\makebox[\textwidth][c]{
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+{\bf Model} & {\bf Data Role} & {\bf False Negative} & {\bf True Negative} & {\bf False Positive} & {\bf True Positive} \\
+\hline
+Neural Network & TRAIN    &    8     &    603    &     8    &     659 \\
+Neural Network & VALIDATE &   13     &    448    &    10    &     488 \\
+Decision Tree  & TRAIN    &   13     &    556    &    55    &     654 \\
+Decision Tree  & VALIDATE &   16     &    415    &    43    &     485 \\
+\hline
+\end{tabular}
+}
+\caption{SAS error matrices}
+\label{tab:sas_error}
+\end{table}
+
+
+\begin{table}[h]
+\makebox[\textwidth][c]{
+\begin{tabular}{|l|l|l|}
+\hline
+{\bf Model} & {\bf Missclassification rate (valid)} & {\bf Average squared Error (valid) } \\
+\hline
+Neural Network & 0.023983 & 0.021215 \\
+Decision Tree  & 0.061522 & 0.055342 \\
+\hline
+\end{tabular}
+}
+\caption{SAS model performance}
+\label{tab:sas_performance_valid}
+\end{table}
+
+\begin{table}[h]
+\makebox[\textwidth][c]{
+\begin{tabular}{|l|l|l|}
+\hline
+{\bf Model} & {\bf Average squared error (train)} & {\bf Missclassification rate (train)} \\
+\hline
+Neural Network & 0.010720 & 0.012520 \\
+Decision Tree  & 0.047754 & 0.053208 \\
+\hline
+\end{tabular}
+}
+\caption{SAS model performance}
+\label{tab:sas_performance_train}
+\end{table}
+
+\clearpage
+
 
 \section{Conclusion}
 We used four data mining tools to show how to perform simple data
@@ -382,7 +464,12 @@ with data mining tools both freely available and commercial.
 
 Personally I found all of the tools intuitive to some degree because solving
 the same problem in one tool makes you understand what to look for in the next
-tool from the four.
+tool from the four. 
+
+SAS left an impression on me. It is de facto industry standard even though
+nowadays we have tools like R or numerical Python which are way less heavy on
+licensing costs, but still not fully adopted by businesses in advanced data
+analysis compared to SAS.
 
 If I were to choose a data mining tool for my personal purposes I would choose
 WEKA for the simple reason that it complies with ideas of open software which
