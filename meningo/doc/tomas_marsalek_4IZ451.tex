@@ -187,19 +187,19 @@ pruned decision trees.
 We first use algorithm One Rule which gives us insight and the most general
 rule (no overfitting) for the predicted attribute. Success rate of this
 classifier for this data set is often nothing to write home about though.
-
 Next we use decision list algorithm PART\cite{Frank1998}\cite{weka_PART} which
 is an algorithm that builds C4.5 decision tree to a limited depth. Result of
 such a classifier is a set of simple rules which is perfect for our analysis.
-
-The most complex algorithm we use is J48, which is WEKA's implementation of
-famous C4.5 decision tree algorithm.
-
-All of the decision tree based algorithms are pruned (reducedErrorPruning =
+Simpler rules that do not overfit as much are obtained with Ridor decision tree
+algorithm. The most complex algorithm we use is J48, which is WEKA's implementation of
+famous C4.5 decision tree algorithm. All of the decision tree based algorithms are pruned (reducedErrorPruning =
 true).
 
+We compare the models not by absolute error, but rather by Kappa statistic,
+which tells us how much better relatively is the model to Zero Rule algorithm
+(taking the majority class).
 
-% TODO decision tree with post prunning
+
 
 \section{Results}
 After playing with the decision tree based classifiers and repeated
@@ -226,14 +226,127 @@ was found.
 The patient was taken to a physician and routine diagnosis tests were
 performed.
 
+No general rule was found to predict diagnosis, however the closest one without overfitting is the
+following set of rules by algorithm PART with overall success rate of $70.71\%$
+and Kappa statistic $0.2882$.
+
+\begin{verbatim}
+SEX = F: VIRUS (44.0/5.0)
+
+FEVER <= 11 AND
+KERNIG <= 0 AND
+FOCAL = - AND
+AGE <= 62: VIRUS (19.0/1.0)
+
+LASEGUE <= 0 AND
+BT <= 39.7 AND
+BT > 37.6: BACTERIA (14.0)
+
+LOC_DAT = +: BACTERIA (10.0/3.0)
+\end{verbatim}
+
+Algorithm Ridor gives simpler rules for the cost of success rate ($67.14\%$) and kappa statistic ($0.1844$).
+\begin{verbatim}
+Diag2 = VIRUS  (140.0/42.0)
+           Except (AGE > 45.5) and (BT > 37.85) and (FEVER <= 6.5) => Diag2 = BACTERIA  (9.0/0.0) [1.0/0.0]
+\end{verbatim}
 
 
-\begin{enumerate}
-    \item With $75.71\%$ probability
-        \begin{description}
-            \item[VIRUS] if FEVER <= 11 AND FEVER > 4
-        \end{description}
-\end{enumerate}
+In order to predict whether culture is found, the best we can do is to use PART
+to get success rate of $73.57\%$ and Kappa of $0.20$ at the cost of obvious
+overfitting.
+
+\begin{verbatim}
+LOC_DAT = - AND
+ONSET = ACUTE AND
+COLD <= 8 AND
+LOC <= 0 AND
+FOCAL = - AND
+LASEGUE <= 0 AND
+SEX = F AND
+AGE <= 51: F (22.0)
+
+LOC_DAT = - AND
+ONSET = ACUTE AND
+COLD <= 8 AND
+LASEGUE <= 0 AND
+LOC <= 0 AND
+FOCAL = - AND
+SEX = M: F (33.0/4.0)
+
+SEIZURE <= 1 AND
+GCS > 10 AND
+LOC_DAT = - AND
+LASEGUE <= 0 AND
+ONSET = ACUTE AND
+COLD <= 4 AND
+SEX = M: F (7.0)
+
+SEIZURE <= 1 AND
+GCS > 10 AND
+ONSET = SUBACUTE: F (7.0/1.0)
+
+SEIZURE <= 1 AND
+GCS > 10 AND
+LASEGUE > 0 AND
+LOC_DAT = -: F (7.0)
+
+SEIZURE <= 1 AND
+GCS <= 10: F (6.0)
+
+SEIZURE <= 1 AND
+ONSET = ACUTE AND
+BT > 39.6: T (5.0)
+
+SEIZURE > 1: F (5.0)
+
+ONSET = ACUTE AND
+KERNIG > 0 AND
+LOC <= 0: F (4.0)
+
+ONSET = ACUTE AND
+COLD > 4 AND
+SEX = M: T (6.0)
+
+FEVER <= 10 AND
+ONSET = ACUTE AND
+FEVER > 2 AND
+BT <= 39.3: T (11.0/1.0)
+
+ONSET = ACUTE AND
+KERNIG <= 0 AND
+FEVER > 0: F (12.0)
+
+SEX = F AND
+STIFF <= 0 AND
+HEADACHE <= 9: T (3.0/1.0)
+
+SEX = F: F (5.0)
+
+FEVER <= 1: T (4.0)
+\end{verbatim}
+
+\section{Laboratory tests}
+Results of laboratory examination are known and we have more attributes to use
+to predict diagnosis, culture and prognosis.
+
+Cause of meningoencephalitis can finally be generally predicted using attributes Cell\_Poly and Cell\_Mono without overfitting. PART found three simple rules with succes rate of $95.71\%$ and Kappa $0.899$.
+
+\begin{verbatim}
+Cell_Poly <= 220 AND
+Cell_Mono > 12: VIRUS (96.0/1.0)
+
+Cell_Poly > 3: BACTERIA (37.0)
+
+CT_FIND = abnormal: BACTERIA (4.0)
+\end{verbatim}
+
+The same result is confirmed by Ridor algorithm with $93.57\%$ success rate and Kappa $0.844$.
+\begin{verbatim}
+Diag2 = BACTERIA  (140.0/98.0)
+           Except (Cell_Poly <= 220.5) and (Cell_Mono > 7.5) => Diag2 = VIRUS  (67.0/1.0) [31.0/1.0]
+\end{verbatim}
+
 
 
 
