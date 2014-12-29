@@ -186,18 +186,26 @@ pruned decision trees.
 
 We first use algorithm One Rule which gives us insight and the most general
 rule (no overfitting) for the predicted attribute. Success rate of this
-classifier for this data set is often nothing to write home about though.
-Next we use decision list algorithm PART\cite{Frank1998}\cite{weka_PART} which
-is an algorithm that builds C4.5 decision tree to a limited depth. Result of
-such a classifier is a set of simple rules which is perfect for our analysis.
-Simpler rules that do not overfit as much are obtained with Ridor decision tree
-algorithm. The most complex algorithm we use is J48, which is WEKA's implementation of
-famous C4.5 decision tree algorithm. All of the decision tree based algorithms are pruned (reducedErrorPruning =
-true).
+classifier for this data set is often nothing to write home about though.  Next
+we use decision list algorithm PART\cite{Frank1998} which is an algorithm that
+builds C4.5 decision tree to a limited depth. Result of such a classifier is a
+set of simple rules which is perfect for our analysis.  Simpler rules that do
+not overfit as much are obtained with Ridor decision tree algorithm. The most
+complex algorithm we use is J48, which is WEKA's implementation of famous C4.5
+decision tree algorithm. All of the decision tree based algorithms are pruned
+(reducedErrorPruning = true).
 
 We compare the models not by absolute error, but rather by Kappa statistic,
 which tells us how much better relatively is the model to Zero Rule algorithm
 (taking the majority class).
+
+\subsection{Associations between attributes}
+Dependency between attributes varies to some degree. Some of the attributes
+directly imply other, some of them are completely independent. By using
+association analysis, we can find rules that show us dependencies.
+
+For that we use Apriori algorithm (FilteredAssociator with filter
+numerictonominal in WEKA).
 
 
 
@@ -226,9 +234,9 @@ was found.
 The patient was taken to a physician and routine diagnosis tests were
 performed.
 
-No general rule was found to predict diagnosis, however the closest one without overfitting is the
-following set of rules by algorithm PART with overall success rate of $70.71\%$
-and Kappa statistic $0.2882$.
+No general rule was found to predict diagnosis, however the closest one without
+overfitting is the following set of rules by algorithm PART with overall
+success rate of $70.71\%$ and Kappa statistic $0.2882$.
 
 \begin{verbatim}
 SEX = F: VIRUS (44.0/5.0)
@@ -248,7 +256,8 @@ LOC_DAT = +: BACTERIA (10.0/3.0)
 Algorithm Ridor gives simpler rules for the cost of success rate ($67.14\%$) and kappa statistic ($0.1844$).
 \begin{verbatim}
 Diag2 = VIRUS  (140.0/42.0)
-           Except (AGE > 45.5) and (BT > 37.85) and (FEVER <= 6.5) => Diag2 = BACTERIA  (9.0/0.0) [1.0/0.0]
+           Except (AGE > 45.5) and (BT > 37.85) and (FEVER <= 6.5) 
+                   => Diag2 = BACTERIA  (9.0/0.0) [1.0/0.0]
 \end{verbatim}
 
 
@@ -330,7 +339,9 @@ FEVER <= 1: T (4.0)
 Results of laboratory examination are known and we have more attributes to use
 to predict diagnosis, culture and prognosis.
 
-Cause of meningoencephalitis can finally be generally predicted using attributes Cell\_Poly and Cell\_Mono without overfitting. PART found three simple rules with succes rate of $95.71\%$ and Kappa $0.899$.
+Cause of meningoencephalitis can finally be generally predicted using
+attributes Cell\_Poly and Cell\_Mono without overfitting. PART found three
+simple rules with succes rate of $95.71\%$ and Kappa $0.899$.
 
 \begin{verbatim}
 Cell_Poly <= 220 AND
@@ -341,11 +352,81 @@ Cell_Poly > 3: BACTERIA (37.0)
 CT_FIND = abnormal: BACTERIA (4.0)
 \end{verbatim}
 
-The same result is confirmed by Ridor algorithm with $93.57\%$ success rate and Kappa $0.844$.
+The same result is confirmed by Ridor algorithm with $93.57\%$ success rate and
+Kappa $0.844$.
 \begin{verbatim}
 Diag2 = BACTERIA  (140.0/98.0)
-           Except (Cell_Poly <= 220.5) and (Cell_Mono > 7.5) => Diag2 = VIRUS  (67.0/1.0) [31.0/1.0]
+           Except (Cell_Poly <= 220.5) and (Cell_Mono > 7.5) 
+                 => Diag2 = VIRUS  (67.0/1.0) [31.0/1.0]
 \end{verbatim}
+
+If we want more detailed prediction of diagnosis, PART can give us an answer
+with success rate $72.14\%$ and Kappa $0.590$.
+\begin{verbatim}
+Cell_Poly <= 220 AND
+FEVER <= 20 AND
+Cell_Mono > 8 AND
+LOC_DAT = -: VIRUS (50.0/7.0)
+
+Cell_Poly <= 36 AND
+Cell_Mono > 8: VIRUS(E) (15.0/2.0)
+
+Cell_Mono <= 36 AND
+AGE > 29: ABSCESS (5.0)
+
+EEG_FOCUS = + AND
+NAUSEA <= 1: BACTERIA (5.0/2.0)
+
+EEG_FOCUS = - AND
+AGE > 27: BACTERIA (15.0/2.0)
+
+: BACTE(E) (4.0/2.0)
+\end{verbatim}
+
+Prognosis is best predicted by pruned C4.5 decision tree (J48 with pruning) but
+gives us nothing statistically significant (Kappa $0$).
+
+\subsection{Associations}
+The following couple of rules were found by first observing graphs of
+dependencies in WEKA and then subsets of attributes with some noticeable
+dependencies were fed to association analysis.
+\begin{enumerate}
+    \item \verb|COURSE(Grouped)=p 23 ==> EEG_WAVE=abnormal 21    conf:(0.91)| \\
+          Patients witch positive EEG\_WAVE are likely to have aftermath
+    \item \verb|Diag2=BACTERIA CULT_FIND=T 15 ==> SEX=M 14    conf:(0.93)| \\
+          Males are more prone to bacterial infection than females
+      \item \verb|DIAG=VIRUS 68 ==> CT_FIND=normal 63    conf:(0.93)| \\
+          Viral infections are likely not to be found by CT scan
+
+\end{enumerate}
+
+\section{After treatment}
+At this stage all of the attributes are known. 
+
+The best way to predict diagnosis is already known from laboratory tests.  We
+haven't found a general way to predict the culture and prognosis of the
+patient.
+
+\section{Conclusion}
+We performed a simple analysis of meningoencephalitis data set and found a
+diagnostic rule based on attributes Cell\_Poly and Cell\_Mono. We found that
+the problem is very prone to overfitting and for the medical domain what we
+need is the exact opposite - preferably rules which can be remembered by
+humans. 
+
+We also observed some dependencies in the data. More of these examples can be
+found by using larger set of data mining methods.  More of these rules can be
+found by association rules between binned attributes and closely looking at
+correlations between targeted and measured attributes. We gave some of these
+rules as an example, but we are sure there is much more of them, just more
+thourough digging through data and more preprocessing is needed. Not all of the
+found rules are significant though.
+
+The analysis can be extended by finding dependencies between numerical
+attributes by using regression analysis. We did not perform that in this
+analysis.
+
+
 
 
 
@@ -360,7 +441,7 @@ Diag2 = BACTERIA  (140.0/98.0)
 % 
 % \clearpage
 
-% \bibliographystyle{csplainnat}
-% \bibliography{ref}
+\bibliographystyle{csplainnat}
+\bibliography{ref}
 
 \end{document}
