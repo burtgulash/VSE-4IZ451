@@ -21,6 +21,12 @@
 \clearpage
 
 \section{Introduction}
+Purpose of JSAI KDD Challenge is to gather many data analysts and collectively
+try to discover knowledge in a single data set\cite{washio:jsai}. Data set for
+challenge of year 2001 was provided by a medical doctor Prof. Shusaku Tsumoto
+(Shimane Medical Univ.), who is the domain expert on the meningoencephalitis
+diagnosis and on the supervisory board of this challenge.
+
 Given a set of medical data of meningoencephalitis diagnoses we try to discover
 predictive rules which could be used by domain experts to find out the cause of
 the illness in various stages of diagnosis process (early symptoms, physical
@@ -386,6 +392,13 @@ AGE > 27: BACTERIA (15.0/2.0)
 Prognosis is best predicted by pruned C4.5 decision tree (J48 with pruning) but
 gives us nothing statistically significant (Kappa $0$).
 
+\section{After treatment}
+At this stage all of the attributes are known. 
+
+The best way to predict diagnosis is already known from laboratory tests.  We
+haven't found a general way to predict the culture and prognosis of the
+patient.
+
 \subsection{Associations}
 The following couple of rules were found by first observing graphs of
 dependencies in WEKA and then subsets of attributes with some noticeable
@@ -395,17 +408,14 @@ dependencies were fed to association analysis.
           Patients witch positive EEG\_WAVE are likely to have aftermath
     \item \verb|Diag2=BACTERIA CULT_FIND=T 15 ==> SEX=M 14    conf:(0.93)| \\
           Males are more prone to bacterial infection than females
-      \item \verb|DIAG=VIRUS 68 ==> CT_FIND=normal 63    conf:(0.93)| \\
+    \item \verb|DIAG=VIRUS 68 ==> CT_FIND=normal 63    conf:(0.93)| \\
           Viral infections are likely not to be found by CT scan
+      \item \verb|DIAG=VIRUS 68 ==> C_COURSE=negative 63    conf:(0.93)| \\
+          \verb|DIAG=BACTERIA 24 ==> C_COURSE=negative 22    conf:(0.92)| \\
+          If the diagnosis is not one of ABSCESS, BACTE(E), TB(E) or VIRUS(E)
+          then the prognosis is good
 
 \end{enumerate}
-
-\section{After treatment}
-At this stage all of the attributes are known. 
-
-The best way to predict diagnosis is already known from laboratory tests.  We
-haven't found a general way to predict the culture and prognosis of the
-patient.
 
 \section{Conclusion}
 We performed a simple analysis of meningoencephalitis data set and found a
@@ -418,13 +428,12 @@ We also observed some dependencies in the data. More of these examples can be
 found by using larger set of data mining methods.  More of these rules can be
 found by association rules between binned attributes and closely looking at
 correlations between targeted and measured attributes. We gave some of these
-rules as an example, but we are sure there is much more of them, just more
-thourough digging through data and more preprocessing is needed. Not all of the
-found rules are significant though.
+rules as an example, but we are sure there is much more of them. Simply more
+thorough digging through data and reevaluation is needed. Not all of the found
+rules are significant though.
 
 The analysis can be extended by finding dependencies between numerical
-attributes by using regression analysis. We did not perform that in this
-analysis.
+attributes by using regression analysis. We did not perform that here.
 
 
 
